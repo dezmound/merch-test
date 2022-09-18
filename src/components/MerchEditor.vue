@@ -4,6 +4,7 @@ import pngCountourCrop from "@/utils/png-countour-crop";
 import debounce from "lodash.debounce";
 import { rad } from "@/utils/toRadians";
 import WebGL from "@/utils/webGLCheck";
+import "@/assets/mug.png";
 import {
   Scene,
   WebGLRenderer,
@@ -31,17 +32,20 @@ const renderer = new WebGLRenderer();
 renderer.setClearColor(0xffffff, 1);
 
 const onMountedHandler = () => {
-  const texture = new TextureLoader().load("src/assets/mug.png", () => {
-    const geometry = new PlaneGeometry(100, 100);
-    const material = new MeshBasicMaterial({
-      map: texture,
-      transparent: true,
-    });
-    const plane = new Mesh(geometry, material);
-    scene.add(plane);
+  const texture = new TextureLoader().load(
+    `${process.env.NODE_ENV === "development" ? "src/" : ""}assets/mug.png`,
+    () => {
+      const geometry = new PlaneGeometry(100, 100);
+      const material = new MeshBasicMaterial({
+        map: texture,
+        transparent: true,
+      });
+      const plane = new Mesh(geometry, material);
+      scene.add(plane);
 
-    renderer.render(scene, camera);
-  });
+      renderer.render(scene, camera);
+    }
+  );
   webGLIsAvailable.value = WebGL.isWebGLAvailable();
 
   if (!webGLIsAvailable.value) {
